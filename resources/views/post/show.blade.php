@@ -6,16 +6,13 @@
 
                 {{-- User Avatar --}}
                 <div class="flex gap-4">
-                    @if ($post->user->image)
-                        <img src="{{ $post->user->imageUrl() }}" alt="{{ $post->user->name }}"
-                            class="w-12 h-12 rounded-full">
-                    @else
-                        <img src="https://static.everypixel.com/ep-pixabay/0329/8099/0858/84037/3298099085884037069-head.png"
-                            alt="Dummy avatar" class="w-12 h-12 rounded-full">
-                    @endif
+                    <x-user-avatar :user='$post->user' />
                     <div>
                         <div class="flex gap-2">
-                            <h3>{{ $post->user->name }}</h3>
+                            <a href="{{ route('profile.show',
+                            $post->user) }}" class="hover:underline">
+                                {{ $post->user->name }}
+                            </a>
                             &middot;
                             <a href="" class="text-emerald-600">Follow</a>
                         </div>
