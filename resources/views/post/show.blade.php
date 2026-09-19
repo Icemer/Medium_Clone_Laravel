@@ -13,11 +13,14 @@
                             $post->user) }}" class="hover:underline">
                                 {{ $post->user->name }}
                             </a>
-                            &middot;
-                            <button 
-                            x-text="following ? 'Unfollow' : 'Follow'"
-                            :class="following ? 'text-red-600' : 'text-emerald-600'"
-                            @click="follow()"></button>
+                            @auth
+                                &middot;
+                                <button 
+                                    x-text="following ? 'Unfollow' : 'Follow'"
+                                    :class="following ? 'text-red-600' : 'text-emerald-600'"
+                                    @click="follow()">
+                                </button>
+                            @endauth
                         </x-follow-ctr>
                         <div class="flex gap-2 text-sm text-gray-500">
                             {{ $post->readTime() }} min read
