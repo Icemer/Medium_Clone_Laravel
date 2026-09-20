@@ -31,7 +31,23 @@
 
                 </div>
                 {{-- User Avatar --}}
+                
+                @if($post->user_id === Auth::id())
+                    <div class="py-4 mt-8 border-t border-b border-gray-200">
+                        <x-primary-button href="{{ route('post.edit',$post->slug) }}">
+                            Edit Post
+                        </x-primary-button>
+                        <form class="inline-block" action="{{ route('post.destroy', $post) }}" method="post">
+                            @csrf
+                            @method('delete')
 
+                            <x-danger-button>
+                                Delete Post
+                            </x-danger-button>
+                        </form>
+                    </div>
+                @endif
+                
                 {{-- Clap Section --}}
                 <x-clap-button :post="$post"></x-clap>
                 {{-- Clap Section --}}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostCreateRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -60,7 +61,7 @@ class PostController extends Controller
 
         Post::create($data);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('myPosts');
     }
 
     /**
@@ -78,15 +79,33 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        if($post->user_id !== Auth::id()){
+            abort(403);
+        }
+        $categories = Category::get();
+        return view('post.edit', [
+            'post' => $post,
+            'categories' => $categories,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        //
+        if($post->user_id !== Auth::id()){
+            abort(403);
+        }
+        $data = $request->validated();
+        $data['slug'] = Str::slug($data['title']);
+        if ($data['image'] ?? false) {
+            $image = $data['image'];
+            $imagePath = $image->store('posts','public');
+            $data['image'] = $imagePath;
+        }
+        $post->update($data);
+        return redirect()->route('myPosts');
     }
 
     /**
@@ -94,11 +113,28 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        if($post->user_id !== Auth::id()){
+            abort(403);
+        }
+        $post->delete();
+
+        return redirect()->route('dashboard');
     }
 
     public function category(Category $category){
         $posts = $category->posts()
+            ->with('user')
+            ->withCount('claps')
+            ->latest()
+            ->Paginate(5);
+
+        return view('post.index', [
+            'posts' => $posts,
+        ]);
+    }
+    public function myPosts(){
+        $user = auth()->user();
+        $posts = $user->posts()
             ->with('user')
             ->withCount('claps')
             ->latest()
