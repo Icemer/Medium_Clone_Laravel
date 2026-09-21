@@ -27,7 +27,7 @@ class PostUpdateRequest extends FormRequest
             'title'=> 'required',
             'content'=> 'required',
             'category_id' => 'required | exists:categories,id',
-            'published_at' => 'nullable | datetime',
+            'published_at' => 'nullable | date',
         ];
     }
 }

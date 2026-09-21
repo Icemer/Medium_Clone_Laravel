@@ -20,6 +20,10 @@ class Post extends Model
         'published_at'
     ];
 
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
+
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -46,7 +50,7 @@ class Post extends Model
         return null;
     }
 
-    public function getCreatedAt (){
-        return $this->created_at->format('M d, Y');
+    public function getPublishedAt (){
+        return $this->published_at->format('M d, Y');
     }
 }

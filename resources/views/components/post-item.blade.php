@@ -18,7 +18,7 @@
                     <span class="text-gray-600">{{ $post->user->username }}</span>
                 </div>
             </a>
-            {{ $post->getCreatedAt() }}
+            {{ $post->getPublishedAt() }}
             <span class="inline-flex gap-1 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-5">

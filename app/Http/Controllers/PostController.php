@@ -20,6 +20,7 @@ class PostController extends Controller
         $user = auth()->user();
         
         $query = Post::with('user')
+            ->where('published_at','<=',now())
             ->withCount('claps')
             ->latest();
         if($user) {
@@ -122,11 +123,19 @@ class PostController extends Controller
     }
 
     public function category(Category $category){
-        $posts = $category->posts()
+        $user = auth()->user();
+        $query = $category->posts()
+            ->where('published_at','<=',now())
             ->with('user')
             ->withCount('claps')
-            ->latest()
-            ->Paginate(5);
+            ->latest();
+        
+        if($user) {
+            $ids = $user->following()->pluck('users.id');
+            $query->whereIn('user_id', $ids);
+        }
+
+        $posts = $query->Paginate(5);
 
         return view('post.index', [
             'posts' => $posts,
