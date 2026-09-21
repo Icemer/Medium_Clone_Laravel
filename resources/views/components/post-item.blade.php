@@ -8,11 +8,16 @@
                 {{ $post->title }}
             </h5>
         </a>
+        
         <div class="mb-3 font-normal text-gray-700"> {{ Str::words($post->content, 20) }}</div>
-        <a href="{{ route('post.show', [
-            'username' => $post->user->username,
-            'post' => $post->slug
-        ]) }}" class="text-sm text-gray-400 flex gap-4">
+        <div class="text-sm text-gray-400 flex gap-4 items-center">
+            <a href="{{ route('profile.show', $post->user->username)}}" class="flex gap-4">
+                <img src="{{ $post->user->imageUrl() }}" alt="{{ $post->name }}" class="w-8 h-8 rounded-full">
+                <div class="flex flex-col hover:underline">
+                    <span class="font-semibold text-gray-900">{{ $post->user->name }}</span>
+                    <span class="text-gray-600">{{ $post->user->username }}</span>
+                </div>
+            </a>
             {{ $post->getCreatedAt() }}
             <span class="inline-flex gap-1 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -22,7 +27,7 @@
                 </svg>
                 {{ $post->claps_count }}
             </span>
-        </a>
+        </div>
     </div>
     <a href="{{ route('post.show', [
             'username' => $post->user->username,
